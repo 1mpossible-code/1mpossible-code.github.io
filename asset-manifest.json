@@ -1,0 +1,39 @@
+{
+  "files": {
+    "main.css": "/static/css/main.9a590aec.css",
+    "main.js": "/static/js/main.b26820d9.js",
+    "static/js/787.83f27819.chunk.js": "/static/js/787.83f27819.chunk.js",
+    "static/media/github-profile-page.png": "/static/media/github-profile-page.6a183efd4e49c8af4905.png",
+    "static/media/Poppins-Thin.ttf": "/static/media/Poppins-Thin.59ff6a729e30c99b478e.ttf",
+    "static/media/Poppins-ExtraLight.ttf": "/static/media/Poppins-ExtraLight.333cb30c20e31999802a.ttf",
+    "static/media/Poppins-Light.ttf": "/static/media/Poppins-Light.7641a0f76ca9ef6c252c.ttf",
+    "static/media/Poppins-Regular.ttf": "/static/media/Poppins-Regular.35d26b781dc5fda684cc.ttf",
+    "static/media/Poppins-Medium.ttf": "/static/media/Poppins-Medium.673ed42382ab264e0bf5.ttf",
+    "static/media/Poppins-SemiBold.ttf": "/static/media/Poppins-SemiBold.ac8d04b620e54be9b0f0.ttf",
+    "static/media/Poppins-Bold.ttf": "/static/media/Poppins-Bold.cdb29a5d7ccf57ff05a3.ttf",
+    "static/media/Poppins-ExtraBold.ttf": "/static/media/Poppins-ExtraBold.01849ee091e1762a5dd5.ttf",
+    "static/media/Poppins-Black.ttf": "/static/media/Poppins-Black.d8b850b920a5ef49d752.ttf",
+    "static/media/DMSans-Regular.ttf": "/static/media/DMSans-Regular.4ee96395e07a04577aab.ttf",
+    "static/media/DMSans-Bold.ttf": "/static/media/DMSans-Bold.c423ce2dc1d85bc50799.ttf",
+    "static/media/DMSans-Medium.ttf": "/static/media/DMSans-Medium.150680530af9dd9fd00b.ttf",
+    "static/media/avatar.jpg": "/static/media/avatar.89717b2f75da61598757.jpg",
+    "static/media/bg2.jpeg": "/static/media/bg2.d4534a8470454668fcb5.jpeg",
+    "static/media/bg3.jpeg": "/static/media/bg3.2f2730fcc2aa18c73b10.jpeg",
+    "static/media/react.png": "/static/media/react.71c5c5a166c52e36eca3.png",
+    "static/media/bg1.jpeg": "/static/media/bg1.7f9a63647593d94fd1cb.jpeg",
+    "static/media/js.png": "/static/media/js.940765f470ddd506af04.png",
+    "static/media/redux.png": "/static/media/redux.7e05dd99c6647176723e.png",
+    "static/media/github.png": "/static/media/github.8e0be2013cff6aa3488f.png",
+    "static/media/css.png": "/static/media/css.a11505beab7413f776d0.png",
+    "static/media/bootstrap.png": "/static/media/bootstrap.268c4375260420e8d982.png",
+    "static/media/typescript.png": "/static/media/typescript.7fd3927444159dcdd965.png",
+    "index.html": "/index.html",
+    "main.9a590aec.css.map": "/static/css/main.9a590aec.css.map",
+    "main.b26820d9.js.map": "/static/js/main.b26820d9.js.map",
+    "787.83f27819.chunk.js.map": "/static/js/787.83f27819.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9a590aec.css",
+    "static/js/main.b26820d9.js"
+  ]
+}
