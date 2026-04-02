@@ -612,7 +612,7 @@ function App() {
                   transition={{ duration: 0.45, delay: index * 0.08 }}
                   className="space-y-4"
                 >
-                  <div className="flex items-start justify-between gap-4">
+                  <div className="flex min-h-[8.5rem] items-start justify-between gap-4">
                     <div>
                       <h3 className="text-lg font-medium text-white">{project.title}</h3>
                       <p className="mt-2 max-w-sm text-sm leading-6 text-neutral-400">{project.blurb}</p>
