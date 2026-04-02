@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Snell Roundhand Local";
+  src: url("/fonts/snell-roundhand-regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme inline {
   --animate-first: moveVertical 30s ease infinite;
   --animate-second: moveInCircle 20s reverse infinite;
@@ -158,8 +166,11 @@ a {
 }
 
 .hero-signature {
-  font-family: "Snell Roundhand", "Apple Chancery", "Zapfino", "URW Chancery L", cursive;
+  font-family: "Snell Roundhand Local", "Snell Roundhand", "Apple Chancery", "Zapfino", "URW Chancery L", cursive;
+  font-weight: 400;
   letter-spacing: 0.01em;
+  font-kerning: normal;
+  font-feature-settings: "liga" 1, "kern" 1;
   text-shadow: 0 0 14px rgba(255, 255, 255, 0.04);
 }
 
