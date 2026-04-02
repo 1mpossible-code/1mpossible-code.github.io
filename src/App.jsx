@@ -20,7 +20,7 @@ const roleWords = [
 ]
 
 const navItems = [
-  { name: 'About', link: '#about' },
+  { name: 'About', link: '#home' },
   { name: 'Projects', link: '#projects' },
   { name: 'Experience', link: '#experience' },
   { name: 'Skills', link: '#skills' },
@@ -246,6 +246,78 @@ function ArrowUpIcon(props) {
   )
 }
 
+function MenuIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" {...props}>
+      <path d="M4 7h16" />
+      <path d="M4 12h16" />
+      <path d="M4 17h16" />
+    </svg>
+  )
+}
+
+function CloseIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" {...props}>
+      <path d="M6 6l12 12" />
+      <path d="M18 6 6 18" />
+    </svg>
+  )
+}
+
+function MobileMenu({ navItems }) {
+  const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    const close = () => setOpen(false)
+    window.addEventListener('hashchange', close)
+    return () => window.removeEventListener('hashchange', close)
+  }, [])
+
+  return (
+    <div className="fixed inset-x-0 top-0 z-50 flex items-start justify-end px-4 pt-4 md:hidden">
+      <button
+        type="button"
+        aria-label={open ? 'Close menu' : 'Open menu'}
+        aria-expanded={open}
+        onClick={() => setOpen((value) => !value)}
+        className="relative z-[60] inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-black/55 text-white shadow-lg shadow-black/20 backdrop-blur-md"
+      >
+        {open ? <CloseIcon className="h-4.5 w-4.5" /> : <MenuIcon className="h-4.5 w-4.5" />}
+      </button>
+
+      <motion.div
+        initial={false}
+        animate={{ opacity: open ? 1 : 0, pointerEvents: open ? 'auto' : 'none' }}
+        transition={{ duration: 0.18, ease: 'easeOut' }}
+        className="absolute inset-0 h-screen bg-black/55 backdrop-blur-sm"
+        onClick={() => setOpen(false)}
+      />
+
+      <motion.div
+        initial={false}
+        animate={{ x: open ? 0 : 24, opacity: open ? 1 : 0, pointerEvents: open ? 'auto' : 'none' }}
+        transition={{ duration: 0.22, ease: 'easeOut' }}
+        className="absolute right-4 top-16 z-[55] w-[min(18rem,calc(100vw-2rem))] overflow-hidden rounded-[1.5rem] border border-white/10 bg-black/75 p-3 shadow-[0_20px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl"
+      >
+        <div className="space-y-1">
+          {navItems.map((item) => (
+            <a
+              key={item.name}
+              href={item.link}
+              onClick={() => setOpen(false)}
+              className="flex items-center justify-between rounded-2xl px-4 py-3 text-sm text-white/80 transition hover:bg-white/[0.05] hover:text-white"
+            >
+              <span>{item.name}</span>
+              <ArrowUpRightIcon className="h-3.5 w-3.5 text-white/40" />
+            </a>
+          ))}
+        </div>
+      </motion.div>
+    </div>
+  )
+}
+
 function CursorFollower() {
   const [enabled, setEnabled] = useState(false)
   const [visible, setVisible] = useState(false)
@@ -260,9 +332,11 @@ function CursorFollower() {
 
   useEffect(() => {
     const finePointer = window.matchMedia('(pointer: fine)').matches
-    setEnabled(finePointer)
+    const coarsePointer = window.matchMedia('(pointer: coarse)').matches
+    const smallViewport = window.innerWidth < 768
+    setEnabled(finePointer && !coarsePointer && !smallViewport)
 
-    if (!finePointer) {
+    if (!finePointer || coarsePointer || smallViewport) {
       return undefined
     }
 
@@ -424,77 +498,91 @@ function App() {
     <div className="min-h-screen bg-black text-white">
       <CursorFollower />
       <FloatingNav forceVisible navItems={navItems} />
+      <MobileMenu navItems={navItems} />
 
       <main id="home" className="relative isolate overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.24),transparent_28%),linear-gradient(to_bottom,rgba(255,255,255,0.06),transparent_24%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:72px_72px] opacity-35" />
 
-        <section className="mx-auto grid min-h-screen w-full max-w-7xl items-center gap-16 px-6 pb-16 pt-32 sm:px-8 lg:grid-cols-[1.05fr_0.95fr] lg:px-10">
+        <section className="mx-auto min-h-screen w-full max-w-7xl px-6 pb-14 pt-24 sm:px-8 sm:pb-16 sm:pt-28 lg:px-10 lg:pt-32">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="relative z-10"
+            className="relative z-10 mb-10 flex justify-center sm:mb-12 lg:mb-14"
           >
-            <h1 className="max-w-4xl text-4xl font-medium leading-tight tracking-[-0.06em] text-white md:text-6xl lg:text-7xl">
-              Maksym Yemelianenko
-              <span className="block text-white/80">
-                <FlipWords words={roleWords} className="px-0 text-white" duration={2600} />
-              </span>
-            </h1>
-
-            <p className="mt-6 max-w-2xl text-base leading-8 text-neutral-200 md:text-lg">
-              Focused on distributed systems, low-level software, and production-minded AI engineering, building high-performance and reliable systems across open source, research labs, startups, and infrastructure-heavy work.
-            </p>
+            <div className="relative flex w-full max-w-6xl items-center justify-center px-2 py-4 sm:px-8 sm:py-10 lg:px-12">
+              <h1 className="hero-signature relative z-10 text-center text-[2.9rem] font-normal leading-[0.94] text-white sm:text-[5.4rem] lg:text-[6.7rem]">
+                <span className="hero-signature-underline relative inline-block">Maksym Yemelianenko</span>
+              </h1>
+            </div>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96, y: 30 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="relative z-10"
-          >
-            <div className="overflow-hidden rounded-[2rem] border border-white/15 bg-white/10 p-4 shadow-[0_0_0_1px_rgba(255,255,255,0.04),0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl">
-              <div className="mb-4 flex items-center justify-between border-b border-white/15 pb-4 text-xs uppercase tracking-[0.3em] text-neutral-300">
-                <div className="flex items-center gap-2">
-                  <span className="h-2.5 w-2.5 rounded-full bg-white/80" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-white/45" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-white/25" />
-                </div>
-                <span>identity.ascii</span>
-              </div>
+          <div className="grid items-start gap-10 sm:gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.05 }}
+              className="relative z-10 text-center lg:text-left"
+            >
+              <h2 className="mx-auto max-w-4xl text-[2.3rem] font-medium leading-[1.02] tracking-[-0.055em] text-white sm:text-5xl md:text-6xl lg:mx-0 lg:text-7xl">
+                <span className="block text-white/80">
+                  <FlipWords words={roleWords} className="px-0 text-white" duration={2600} />
+                </span>
+              </h2>
 
-              <div className="rounded-[1.5rem] border border-white/10 bg-black/30 p-6">
-                <pre className="overflow-x-auto font-mono text-[10px] leading-4 text-neutral-200 sm:text-xs sm:leading-5">
+              <p className="mx-auto mt-5 max-w-xl text-sm leading-7 text-neutral-200 sm:text-base sm:leading-8 md:text-lg lg:mx-0 lg:max-w-2xl">
+                Focused on distributed systems, low-level software, and production-minded AI engineering, building high-performance and reliable systems across open source, research labs, startups, and infrastructure-heavy work.
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="relative z-10"
+            >
+              <div className="overflow-hidden rounded-[1.6rem] border border-white/12 bg-white/[0.08] p-3 shadow-[0_0_0_1px_rgba(255,255,255,0.03),0_24px_60px_rgba(0,0,0,0.3)] backdrop-blur-xl sm:rounded-[2rem] sm:p-4">
+                <div className="mb-3 flex items-center justify-between border-b border-white/12 pb-3 text-[10px] uppercase tracking-[0.24em] text-neutral-300 sm:mb-4 sm:pb-4 sm:text-xs sm:tracking-[0.3em]">
+                  <div className="flex items-center gap-2">
+                    <span className="h-2.5 w-2.5 rounded-full bg-white/80" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-white/45" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-white/25" />
+                  </div>
+                  <span>identity.ascii</span>
+                </div>
+
+                <div className="rounded-[1.2rem] border border-white/10 bg-black/30 p-4 sm:rounded-[1.5rem] sm:p-6">
+                  <pre className="overflow-x-auto font-mono text-[8px] leading-[1.15] text-neutral-200 sm:text-xs sm:leading-5">
 {`███╗   ███╗ █████╗ ██╗  ██╗███████╗██╗   ██╗███╗   ███╗
 ████╗ ████║██╔══██╗██║ ██╔╝██╔════╝╚██╗ ██╔╝████╗ ████║
 ██╔████╔██║███████║█████╔╝ ███████╗ ╚████╔╝ ██╔████╔██║
 ██║╚██╔╝██║██╔══██║██╔═██╗ ╚════██║  ╚██╔╝  ██║╚██╔╝██║
 ██║ ╚═╝ ██║██║  ██║██║  ██╗███████║   ██║   ██║ ╚═╝ ██║
 ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝   ╚═╝   ╚═╝     ╚═╝`}
-                </pre>
-
-                <div className="mt-6 space-y-3 border-t border-white/10 pt-5 font-mono text-sm text-neutral-300">
-                  <p>
-                    <span className="text-white/40">$</span> quote
-                  </p>
-                  <p className="text-white/80">
-                    A man is not defined by what he endures,
-                    <br />
-                    but by what he refuses to become.
-                  </p>
-                  <p>
-                    <span className="text-white/40">$</span> author
-                  </p>
-                  <p className="text-white/80">Friedrich Nietzsche, 1844-1900</p>
-                  <p>
-                    <span className="text-white/40">$</span> note
-                  </p>
-                  <p className="text-white/80">philosophy, self-overcoming, character under pressure</p>
+                  </pre>
+                  <div className="mt-4 space-y-2 border-t border-white/10 pt-4 font-mono text-xs text-neutral-300 sm:mt-6 sm:space-y-3 sm:pt-5 sm:text-sm">
+                    <p>
+                      <span className="text-white/40">$</span> quote
+                    </p>
+                    <p className="text-white/80 leading-6 sm:leading-7">
+                      A man is not defined by what he endures,
+                      <br />
+                      but by what he refuses to become.
+                    </p>
+                    <p>
+                      <span className="text-white/40">$</span> author
+                    </p>
+                    <p className="text-white/80">Friedrich Nietzsche, 1844-1900</p>
+                    <p>
+                      <span className="text-white/40">$</span> note
+                    </p>
+                    <p className="text-white/80">philosophy, self-overcoming, character under pressure</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </section>
 
         <section id="about" className="h-px" />

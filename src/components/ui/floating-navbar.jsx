@@ -29,7 +29,7 @@ export function FloatingNav({ navItems, cta, className, forceVisible = false }) 
         initial={{ opacity: 1, y: -100 }}
         animate={{ y: visible ? 0 : -100, opacity: visible ? 1 : 0 }}
         transition={{ duration: 0.2 }}
-        className={cn('fixed inset-x-0 top-6 z-50 mx-auto flex max-w-fit items-center justify-center', className)}
+        className={cn('fixed inset-x-0 top-6 z-50 mx-auto hidden max-w-fit items-center justify-center md:flex', className)}
       >
         <div className="flex items-center justify-center gap-2 rounded-full border border-white/10 bg-black/55 px-2 py-1.5 shadow-lg shadow-black/20 backdrop-blur-md">
           <div className="flex items-center gap-1">
