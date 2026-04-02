@@ -450,8 +450,8 @@ function CursorFollower() {
           y,
           translateX: '-50%',
           translateY: '-50%',
-          opacity: visible ? 1 : 0,
-          scale: pressed ? 1.18 : undefined,
+          opacity: visible ? (scrollDirection ? 0 : 1) : 0,
+          scale: scrollDirection ? undefined : pressed ? 1.18 : undefined,
         }}
       />
       <motion.div
