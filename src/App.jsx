@@ -1,5 +1,6 @@
 import { motion } from 'motion/react'
 import { CardBody, CardContainer, CardItem } from './components/ui/3d-card'
+import { BackgroundGradientAnimation } from './components/ui/background-gradient-animation'
 import { FlipWords } from './components/ui/flip-words'
 import { FloatingNav } from './components/ui/floating-navbar'
 import { Meteors } from './components/ui/meteors'
@@ -57,6 +58,21 @@ const projectCards = [
       'encrypted file upload, retrieval, and management available',
       'full-stack build with Flask, React, Redux, and Docker',
     ],
+  },
+]
+
+const skillGroups = [
+  {
+    title: 'Languages',
+    items: ['Go', 'Rust', 'C/C++', 'Python', 'TypeScript', 'SQL'],
+  },
+  {
+    title: 'Systems / Infra',
+    items: ['Linux', 'Docker', 'Kubernetes', 'Redis', 'PostgreSQL', 'AWS'],
+  },
+  {
+    title: 'Backend / ML',
+    items: ['Flask', 'FastAPI', 'Node.js', 'PyTorch', 'Transformers', 'Anthropic API'],
   },
 ]
 
@@ -308,7 +324,56 @@ function App() {
             data={experienceItems}
           />
         </section>
-        <section id="skills" className="h-px" />
+        <section id="skills" className="mx-auto w-full max-w-7xl px-6 py-24 sm:px-8 lg:px-10 lg:py-28">
+          <BackgroundGradientAnimation
+            interactive
+            containerClassName="rounded-[2rem] border border-white/10"
+            className="relative z-10"
+            gradientBackgroundStart="rgb(4, 4, 5)"
+            gradientBackgroundEnd="rgb(14, 14, 16)"
+            firstColor="255, 255, 255"
+            secondColor="160, 160, 168"
+            thirdColor="110, 110, 118"
+            fourthColor="75, 75, 82"
+            fifthColor="210, 210, 220"
+            pointerColor="255, 255, 255"
+            size="75%"
+            blendingValue="soft-light"
+          >
+            <div className="relative z-10 px-6 py-10 sm:px-8 lg:px-10 lg:py-12">
+              <div className="mb-12 max-w-3xl">
+                <p className="text-sm uppercase tracking-[0.35em] text-white/45">Skills</p>
+                <h2 className="mt-4 text-3xl font-medium tracking-[-0.05em] text-white md:text-5xl">
+                  Tooling for backend depth, systems work, and production reality.
+                </h2>
+                <p className="mt-4 max-w-2xl text-base leading-8 text-neutral-300">
+                  Most of the stack here supports the same pattern: build reliable software, keep it fast, and make it hold up outside toy environments.
+                </p>
+              </div>
+
+              <div className="grid gap-5 lg:grid-cols-3">
+                {skillGroups.map((group) => (
+                  <div
+                    key={group.title}
+                    className="rounded-[1.5rem] border border-white/10 bg-black/25 p-5 backdrop-blur-xl"
+                  >
+                    <p className="text-xs uppercase tracking-[0.35em] text-white/40">{group.title}</p>
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      {group.items.map((item) => (
+                        <span
+                          key={item}
+                          className="rounded-full border border-white/10 bg-white/8 px-3 py-2 text-sm text-white/80"
+                        >
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </BackgroundGradientAnimation>
+        </section>
         <section id="contact" className="h-px" />
       </main>
     </div>
