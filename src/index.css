@@ -218,6 +218,13 @@ a {
   }
 }
 
+.typewriter-terminal-caret {
+  width: 0.55em;
+  height: 0.9em;
+  border-radius: 0.08em;
+  background: currentColor;
+}
+
 @keyframes signatureUnderline {
   0% {
     transform: scaleX(0);

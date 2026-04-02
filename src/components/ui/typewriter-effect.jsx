@@ -38,7 +38,7 @@ export function TypewriterEffect({ words, className, cursorClassName }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, repeat: Infinity, repeatType: 'reverse' }}
-        className={cn('inline-block h-[0.95em] w-[0.55em] rounded-[0.08em] bg-white align-middle', cursorClassName)}
+        className={cn('typewriter-terminal-caret inline-block align-middle text-base md:text-xl lg:text-3xl', cursorClassName)}
       />
     </div>
   )
@@ -74,7 +74,7 @@ export function TypewriterEffectSmooth({ words, className, cursorClassName }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, repeat: Infinity, repeatType: 'reverse' }}
-        className={cn('mb-[0.04em] block h-[0.95em] w-[0.55em] rounded-[0.08em] bg-white', cursorClassName)}
+        className={cn('typewriter-terminal-caret mb-[0.04em] block text-xs sm:text-base md:text-xl xl:text-5xl', cursorClassName)}
       />
     </div>
   )
