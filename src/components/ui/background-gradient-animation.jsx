@@ -92,7 +92,7 @@ export function BackgroundGradientAnimation({
   return (
     <div
       className={cn(
-        'relative left-0 top-0 overflow-hidden bg-[linear-gradient(40deg,var(--gradient-background-start),var(--gradient-background-end))]',
+        'relative left-0 top-0 overflow-hidden bg-[linear-gradient(40deg,var(--gradient-background-start),var(--gradient-background-end))] shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]',
         containerClassName,
       )}
     >
@@ -115,7 +115,7 @@ export function BackgroundGradientAnimation({
 
       <div
         className={cn(
-          'gradients-container absolute inset-0 h-full w-full blur-lg',
+          'gradients-container absolute inset-0 h-full w-full -translate-y-10 opacity-75 blur-lg',
           isSafari ? 'blur-2xl' : '[filter:url(#blurMe)_blur(40px)]',
         )}
       >

@@ -1,4 +1,4 @@
-import { motion } from 'motion/react'
+import { motion, useMotionValue, useSpring } from 'motion/react'
 import { CardBody, CardContainer, CardItem } from './components/ui/3d-card'
 import { BackgroundGradientAnimation } from './components/ui/background-gradient-animation'
 import { FlipWords } from './components/ui/flip-words'
@@ -6,6 +6,8 @@ import { FloatingNav } from './components/ui/floating-navbar'
 import { Meteors } from './components/ui/meteors'
 import { Terminal } from './components/ui/terminal'
 import { Timeline } from './components/ui/timeline'
+import { TypewriterEffectSmooth } from './components/ui/typewriter-effect'
+import { useEffect, useRef, useState } from 'react'
 
 const roleWords = [
   'Backend Software Engineer',
@@ -76,6 +78,49 @@ const skillGroups = [
   },
 ]
 
+const contactWords = [
+  { text: 'GitHub' },
+  { text: 'LinkedIn' },
+  { text: 'or' },
+  { text: 'email.', className: 'text-white/70' },
+]
+
+function ContactLink({ href, children, external = false, className = '' }) {
+  return (
+    <a
+      href={href}
+      target={external ? '_blank' : undefined}
+      rel={external ? 'noreferrer' : undefined}
+      className={`group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-xl px-5 text-sm text-white transition ${className}`}
+    >
+      <span className="absolute inset-0 rounded-xl border border-white/[0.08] transition group-hover:border-white/[0.18]" />
+      <span className="absolute inset-0 rounded-xl bg-[linear-gradient(110deg,transparent_20%,rgba(255,255,255,0.14)_50%,transparent_80%)] opacity-0 transition duration-500 group-hover:translate-x-full group-hover:opacity-100" />
+      <span className="absolute inset-[1px] rounded-[11px] bg-black/45 transition group-hover:bg-white/[0.05]" />
+      <span className="relative z-10 flex items-center gap-2 tracking-[0.01em]">
+        {children}
+        <ArrowUpRightIcon className="h-3.5 w-3.5 text-white/55 transition group-hover:text-white" />
+      </span>
+    </a>
+  )
+}
+
+function EmailContactLink({ href, children, className = '' }) {
+  return (
+    <a
+      href={href}
+      className={`group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-xl px-5 text-sm text-white transition ${className}`}
+    >
+      <span className="absolute inset-0 rounded-xl border border-white/[0.14] transition group-hover:border-white/[0.28]" />
+      <span className="absolute inset-0 rounded-xl bg-white/[0.08] transition group-hover:bg-white/[0.12]" />
+      <span className="absolute inset-0 rounded-xl bg-[linear-gradient(110deg,transparent_20%,rgba(255,255,255,0.12)_50%,transparent_80%)] opacity-0 transition duration-500 group-hover:translate-x-full group-hover:opacity-100" />
+      <span className="relative z-10 flex items-center gap-2 tracking-[0.01em]">
+        {children}
+        <ArrowUpRightIcon className="h-3.5 w-3.5 text-white/60 transition group-hover:text-white" />
+      </span>
+    </a>
+  )
+}
+
 function ExperienceEntry({ company, role, period, tags, mark, href }) {
   return (
     <CardContainer className="w-full" containerClassName="justify-start py-0">
@@ -112,7 +157,7 @@ function ExperienceEntry({ company, role, period, tags, mark, href }) {
         </CardItem>
         <CardItem
           translateZ={150}
-          className="absolute bottom-5 right-5 select-none text-right text-3xl font-semibold tracking-[-0.08em] text-white/12 sm:text-4xl"
+          className="absolute bottom-5 right-5 text-right text-3xl font-semibold tracking-[-0.08em] text-white/12 sm:text-4xl"
         >
           {mark}
         </CardItem>
@@ -192,9 +237,192 @@ function ArrowUpRightIcon(props) {
   )
 }
 
+function ArrowUpIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" {...props}>
+      <path d="M12 19V5" />
+      <path d="m5 12 7-7 7 7" />
+    </svg>
+  )
+}
+
+function CursorFollower() {
+  const [enabled, setEnabled] = useState(false)
+  const [visible, setVisible] = useState(false)
+  const [active, setActive] = useState(false)
+  const [pressed, setPressed] = useState(false)
+  const [scrollDirection, setScrollDirection] = useState(null)
+  const scrollTimerRef = useRef(null)
+  const x = useMotionValue(-100)
+  const y = useMotionValue(-100)
+  const springX = useSpring(x, { stiffness: 760, damping: 34, mass: 0.2 })
+  const springY = useSpring(y, { stiffness: 760, damping: 34, mass: 0.2 })
+
+  useEffect(() => {
+    const finePointer = window.matchMedia('(pointer: fine)').matches
+    setEnabled(finePointer)
+
+    if (!finePointer) {
+      return undefined
+    }
+
+    const handleMove = (event) => {
+      x.set(event.clientX)
+      y.set(event.clientY)
+      setVisible(true)
+    }
+
+    const handleLeave = (event) => {
+      if (event.relatedTarget == null) {
+        setVisible(false)
+      }
+    }
+    const updateActive = (event) => {
+      const interactive = event.target instanceof Element
+        ? event.target.closest('a, button, [role="button"], input, textarea, select, summary')
+        : null
+      setActive(Boolean(interactive))
+    }
+    const handleMouseDown = (event) => {
+      if (event.button !== 0) {
+        return
+      }
+
+      setPressed(true)
+    }
+    const handleMouseUp = () => setPressed(false)
+    const handleWheel = (event) => {
+      setVisible(true)
+      setScrollDirection(event.deltaY > 0 ? 'down' : 'up')
+
+      if (scrollTimerRef.current) {
+        window.clearTimeout(scrollTimerRef.current)
+      }
+
+      scrollTimerRef.current = window.setTimeout(() => {
+        setScrollDirection(null)
+        scrollTimerRef.current = null
+      }, 220)
+    }
+
+    window.addEventListener('mousemove', handleMove)
+    window.addEventListener('mouseout', handleLeave)
+    window.addEventListener('mouseover', updateActive)
+    window.addEventListener('mousedown', handleMouseDown)
+    window.addEventListener('mouseup', handleMouseUp)
+    window.addEventListener('wheel', handleWheel, { passive: true })
+
+    return () => {
+      window.removeEventListener('mousemove', handleMove)
+      window.removeEventListener('mouseout', handleLeave)
+      window.removeEventListener('mouseover', updateActive)
+      window.removeEventListener('mousedown', handleMouseDown)
+      window.removeEventListener('mouseup', handleMouseUp)
+      window.removeEventListener('wheel', handleWheel)
+
+      if (scrollTimerRef.current) {
+        window.clearTimeout(scrollTimerRef.current)
+        scrollTimerRef.current = null
+      }
+    }
+  }, [x, y])
+
+  if (!enabled) {
+    return null
+  }
+
+  const innerCursorAnimation = scrollDirection
+    ? {
+        scale: 0,
+        backgroundColor: 'rgb(255,255,255)',
+        boxShadow: '0 0 24px rgba(255,255,255,0.45)',
+      }
+    : active
+      ? {
+          scale: [1, 1.35, 1],
+          backgroundColor: 'rgb(255,255,255)',
+          boxShadow: '0 0 16px rgba(255,255,255,0.28)',
+        }
+      : {
+          scale: 1,
+          backgroundColor: 'rgb(255,255,255)',
+          boxShadow: '0 0 24px rgba(255,255,255,0.45)',
+        }
+
+  const innerCursorTransition = scrollDirection
+    ? { duration: 0.12, ease: 'easeOut' }
+    : active
+      ? { duration: 0.9, repeat: Number.POSITIVE_INFINITY, ease: 'easeInOut' }
+      : { duration: 0.45, ease: 'easeOut' }
+
+  return (
+    <>
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none fixed left-0 top-0 z-[100] rounded-full border border-white/12 bg-white/[0.02] backdrop-blur-sm"
+        animate={
+          scrollDirection
+            ? {
+                borderColor: 'rgba(255,255,255,0)',
+                backgroundColor: 'rgba(255,255,255,0)',
+              }
+            : {
+                borderColor: 'rgba(255,255,255,0.12)',
+                backgroundColor: 'rgba(255,255,255,0.02)',
+              }
+        }
+        transition={{ duration: 0.18, ease: 'easeOut' }}
+        style={{
+          x: springX,
+          y: springY,
+          translateX: '-50%',
+          translateY: '-50%',
+          opacity: visible ? 1 : 0,
+          scale: pressed ? 1.08 : 1,
+          width: 28,
+          height: 28,
+        }}
+      />
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none fixed left-0 top-0 z-[101] h-2.5 w-2.5 rounded-full bg-white shadow-[0_0_24px_rgba(255,255,255,0.45)]"
+        animate={innerCursorAnimation}
+        transition={innerCursorTransition}
+        style={{
+          x: springX,
+          y: springY,
+          translateX: '-50%',
+          translateY: '-50%',
+          opacity: visible ? 1 : 0,
+          scale: pressed ? 1.18 : undefined,
+        }}
+      />
+      <motion.div
+        aria-hidden="true"
+        animate={{
+          opacity: scrollDirection && visible ? 1 : 0,
+          scale: scrollDirection ? 1 : 0.7,
+          rotate: scrollDirection === 'down' ? 180 : 0,
+        }}
+        transition={{ duration: 0.14, ease: 'easeOut' }}
+        className="pointer-events-none fixed left-0 top-0 z-[102] text-white"
+        style={{
+          x: springX,
+          y: springY,
+          translateX: '-50%',
+          translateY: '-50%',
+        }}
+      >
+        <ArrowUpIcon className="h-4 w-4" />
+      </motion.div>
+    </>
+  )
+}
+
 function App() {
   return (
     <div className="min-h-screen bg-black text-white">
+      <CursorFollower />
       <FloatingNav forceVisible navItems={navItems} />
 
       <main id="home" className="relative isolate overflow-hidden">
@@ -248,13 +476,21 @@ function App() {
 
                 <div className="mt-6 space-y-3 border-t border-white/10 pt-5 font-mono text-sm text-neutral-300">
                   <p>
-                    <span className="text-white/40">$</span> whoami
+                    <span className="text-white/40">$</span> quote
                   </p>
-                  <p className="text-white/80">maksym</p>
+                  <p className="text-white/80">
+                    A man is not defined by what he endures,
+                    <br />
+                    but by what he refuses to become.
+                  </p>
                   <p>
-                    <span className="text-white/40">$</span> location
+                    <span className="text-white/40">$</span> author
                   </p>
-                  <p className="text-white/80">new york</p>
+                  <p className="text-white/80">Friedrich Nietzsche, 1844-1900</p>
+                  <p>
+                    <span className="text-white/40">$</span> note
+                  </p>
+                  <p className="text-white/80">philosophy, self-overcoming, character under pressure</p>
                 </div>
               </div>
             </div>
@@ -263,7 +499,7 @@ function App() {
 
         <section id="about" className="h-px" />
         <section id="projects" className="mx-auto w-full max-w-7xl px-6 py-24 sm:px-8 lg:px-10 lg:py-28">
-          <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.02] px-6 py-10 sm:px-8 lg:px-10">
+          <div className="relative overflow-hidden rounded-[2rem] bg-transparent px-6 py-10 sm:px-8 lg:px-10">
             <div className="pointer-events-none absolute inset-0">
               <Meteors number={18} />
             </div>
@@ -327,20 +563,20 @@ function App() {
         <section id="skills" className="mx-auto w-full max-w-7xl px-6 py-24 sm:px-8 lg:px-10 lg:py-28">
           <BackgroundGradientAnimation
             interactive
-            containerClassName="rounded-[2rem] border border-white/10"
+            containerClassName="rounded-[2rem] before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-40 before:bg-gradient-to-b before:from-[#020202] before:via-[#020202]/80 before:to-transparent after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-40 after:bg-gradient-to-t after:from-[#020202] after:via-[#020202]/80 after:to-transparent"
             className="relative z-10"
-            gradientBackgroundStart="rgb(4, 4, 5)"
-            gradientBackgroundEnd="rgb(14, 14, 16)"
-            firstColor="255, 255, 255"
-            secondColor="160, 160, 168"
-            thirdColor="110, 110, 118"
-            fourthColor="75, 75, 82"
-            fifthColor="210, 210, 220"
-            pointerColor="255, 255, 255"
-            size="75%"
+            gradientBackgroundStart="rgb(2, 2, 2)"
+            gradientBackgroundEnd="rgb(6, 6, 7)"
+            firstColor="150, 150, 155"
+            secondColor="90, 90, 96"
+            thirdColor="58, 58, 64"
+            fourthColor="36, 36, 40"
+            fifthColor="120, 120, 126"
+            pointerColor="180, 180, 188"
+            size="82%"
             blendingValue="soft-light"
           >
-            <div className="relative z-10 px-6 py-10 sm:px-8 lg:px-10 lg:py-12">
+            <div className="relative z-10 px-6 py-20 sm:px-8 lg:px-10 lg:py-24">
               <div className="mb-12 max-w-3xl">
                 <p className="text-sm uppercase tracking-[0.35em] text-white/45">Skills</p>
                 <h2 className="mt-4 text-3xl font-medium tracking-[-0.05em] text-white md:text-5xl">
@@ -355,14 +591,14 @@ function App() {
                 {skillGroups.map((group) => (
                   <div
                     key={group.title}
-                    className="rounded-[1.5rem] border border-white/10 bg-black/25 p-5 backdrop-blur-xl"
+                    className="rounded-[1.5rem] border border-white/[0.06] bg-black/18 p-5 backdrop-blur-xl"
                   >
                     <p className="text-xs uppercase tracking-[0.35em] text-white/40">{group.title}</p>
                     <div className="mt-5 flex flex-wrap gap-2">
                       {group.items.map((item) => (
                         <span
                           key={item}
-                          className="rounded-full border border-white/10 bg-white/8 px-3 py-2 text-sm text-white/80"
+                          className="rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm text-white/80"
                         >
                           {item}
                         </span>
@@ -374,7 +610,45 @@ function App() {
             </div>
           </BackgroundGradientAnimation>
         </section>
-        <section id="contact" className="h-px" />
+        <section id="contact" className="mx-auto w-full max-w-7xl px-6 py-24 sm:px-8 lg:px-10 lg:py-28">
+          <div className="rounded-[2rem] bg-white/[0.015] px-6 py-12 sm:px-8 lg:px-10">
+            <motion.div
+              initial={{ opacity: 0, y: 32 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
+              className="flex max-w-4xl flex-col"
+            >
+              <p className="text-sm uppercase tracking-[0.35em] text-white/45">Contact</p>
+              <h2 className="mt-4 max-w-4xl text-4xl font-medium tracking-[-0.05em] text-white md:text-6xl">
+                Reach out if the work is worth shipping.
+              </h2>
+              <p className="mt-4 max-w-2xl text-base leading-8 text-neutral-300">
+                Best way in is through direct links. I am most interested in backend, distributed systems, platform, and ML infrastructure work.
+              </p>
+            </motion.div>
+
+            <div className="mt-8 flex flex-col items-start">
+              <TypewriterEffectSmooth
+                words={contactWords}
+                className="justify-start"
+                cursorClassName="bg-white"
+              />
+
+              <div className="mt-4 flex flex-col items-start gap-3 md:flex-row md:flex-wrap">
+                <ContactLink href="https://github.com/1mpossible-code" external className="w-44">
+                  GitHub
+                </ContactLink>
+                <ContactLink href="https://www.linkedin.com/in/maksym-yemelianenko/" external className="w-44">
+                  LinkedIn
+                </ContactLink>
+                <EmailContactLink href="mailto:max.yemelianenko@gmail.com" className="w-72 px-6">
+                  max.yemelianenko@gmail.com
+                </EmailContactLink>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
   )
