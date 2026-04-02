@@ -1,7 +1,9 @@
 import { motion } from 'motion/react'
+import { CardBody, CardContainer, CardItem } from './components/ui/3d-card'
 import { FlipWords } from './components/ui/flip-words'
 import { FloatingNav } from './components/ui/floating-navbar'
 import { Terminal } from './components/ui/terminal'
+import { Timeline } from './components/ui/timeline'
 
 const roleWords = [
   'Backend Software Engineer',
@@ -54,6 +56,113 @@ const projectCards = [
       'encrypted file upload, retrieval, and management available',
       'full-stack build with Flask, React, Redux, and Docker',
     ],
+  },
+]
+
+function ExperienceEntry({ company, role, period, tags, mark, href }) {
+  return (
+    <CardContainer className="w-full" containerClassName="justify-start py-0">
+      <CardBody className="group/card relative min-h-[16.5rem] w-full rounded-[1.5rem] border border-white/10 bg-white/5 p-5 backdrop-blur-sm dark:hover:shadow-2xl dark:hover:shadow-white/[0.08]">
+        <CardItem
+          as="a"
+          href={href}
+          target="_blank"
+          rel="noreferrer"
+          translateZ={70}
+          className="absolute right-5 top-5 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-black/20 text-white/70 hover:border-white/25 hover:text-white"
+          aria-label={`Open ${company}`}
+        >
+          <ArrowUpRightIcon className="h-4 w-4" />
+        </CardItem>
+        <CardItem translateZ={40} className="select-text text-xs uppercase tracking-[0.35em] text-white/40">
+          {period}
+        </CardItem>
+        <CardItem
+          as="a"
+          href={href}
+          target="_blank"
+          rel="noreferrer"
+          translateZ={180}
+          className="mt-3 block max-w-[17rem] select-text text-[1.45rem] font-semibold tracking-[-0.05em] text-white hover:text-white/80"
+        >
+          {company}
+        </CardItem>
+        <CardItem translateZ={130} className="mt-2 select-text text-sm text-neutral-300">
+          {role}
+        </CardItem>
+        <CardItem translateZ={90} className="mt-5 inline-flex select-text rounded-full border border-white/10 bg-black/20 px-3 py-1 text-[11px] text-neutral-300">
+          {tags.join(' / ')}
+        </CardItem>
+        <CardItem
+          translateZ={150}
+          className="absolute bottom-5 right-5 select-none text-right text-3xl font-semibold tracking-[-0.08em] text-white/12 sm:text-4xl"
+        >
+          {mark}
+        </CardItem>
+      </CardBody>
+    </CardContainer>
+  )
+}
+
+const experienceItems = [
+  {
+    title: '2025',
+    content: (
+      <div className="space-y-2">
+        <ExperienceEntry
+          company="Google Summer of Code @ VideoLAN"
+          role="Open Source Contributor"
+          period="Jun 2025 - Aug 2025"
+          tags={['open source', 'systems']}
+          mark="VLC"
+          href="https://gist.github.com/1mpossible-code/91030d44f294b14c0c21cc5adfc3959f"
+        />
+        <ExperienceEntry
+          company="NYU High Speed Research Network"
+          role="Undergraduate Research Assistant"
+          period="Jan 2025 - May 2025"
+          tags={['distributed', 'real-time']}
+          mark="HSRN"
+          href="https://vip.hsrn.nyu.edu/"
+        />
+      </div>
+    ),
+  },
+  {
+    title: '2024',
+    content: (
+      <div className="space-y-2">
+        <ExperienceEntry
+          company="NYU AI4CE Lab"
+          role="Undergraduate Research Assistant"
+          period="Apr 2024 - Jul 2024"
+          tags={['ml systems', 'research']}
+          mark="AI4CE"
+          href="https://ai4ce.github.io/"
+        />
+        <ExperienceEntry
+          company="Pomu"
+          role="Software Engineer"
+          period="Aug 2023 - Jul 2024"
+          tags={['backend', 'ai product']}
+          mark="PM"
+          href="https://pomu.io/"
+        />
+      </div>
+    ),
+  },
+  {
+    title: '2023',
+    content: (
+      <ExperienceEntry
+        company="Borderless"
+        role="Software Engineering Intern"
+        period="Jun 2023 - Aug 2023"
+        tags={['data', 'backend']}
+        mark="BD"
+        href="https://borderless.so/"
+      />
+    ),
   },
 ]
 
@@ -186,7 +295,12 @@ function App() {
             ))}
           </div>
         </section>
-        <section id="experience" className="h-px" />
+        <section id="experience" className="mx-auto w-full max-w-7xl px-0 py-10 lg:py-16">
+          <Timeline
+            title="Built around systems, infra, and work that has to hold up under load."
+            data={experienceItems}
+          />
+        </section>
         <section id="skills" className="h-px" />
         <section id="contact" className="h-px" />
       </main>
