@@ -29,7 +29,7 @@ const navItems = [
 
 const projectCards = [
   {
-    title: 'Distributed Job Queue System',
+    title: 'Distributed Job Queue',
     repo: 'https://github.com/1mpossible-code/distributed-job-queue',
     blurb: 'Go and Redis queueing infrastructure with reliability primitives built in.',
     command: 'go run cmd/queue --priority --retries --dead-letter',
@@ -514,7 +514,7 @@ function App() {
             </p>
             </div>
 
-            <div className="relative z-10 grid gap-8 xl:grid-cols-3">
+            <div className="relative z-10 grid gap-8 lg:grid-cols-3">
               {projectCards.map((project, index) => (
                 <motion.div
                   key={project.title}
@@ -526,7 +526,7 @@ function App() {
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <h3 className="text-xl font-medium text-white">{project.title}</h3>
+                      <h3 className="text-lg font-medium text-white">{project.title}</h3>
                       <p className="mt-2 max-w-sm text-sm leading-6 text-neutral-400">{project.blurb}</p>
                     </div>
                     <a
