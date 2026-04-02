@@ -10,8 +10,10 @@ export function CardContainer({ children, className, containerClassName }) {
   const handleMouseMove = (event) => {
     if (!containerRef.current) return
     const { left, top, width, height } = containerRef.current.getBoundingClientRect()
-    const x = (event.clientX - left - width / 2) / 25
-    const y = (event.clientY - top - height / 2) / 25
+    const rawX = (event.clientX - left - width / 2) / 40
+    const rawY = (event.clientY - top - height / 2) / 40
+    const x = Math.max(-6, Math.min(6, rawX))
+    const y = Math.max(-6, Math.min(6, rawY))
     containerRef.current.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`
   }
 
@@ -36,7 +38,7 @@ export function CardContainer({ children, className, containerClassName }) {
           onMouseEnter={handleMouseEnter}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
-          className={cn('relative flex items-center justify-center transition-all duration-200 ease-linear', className)}
+          className={cn('relative flex transform-gpu items-center justify-center transition-transform duration-300 ease-out [backface-visibility:hidden] [will-change:transform]', className)}
           style={{ transformStyle: 'preserve-3d' }}
         >
           {children}
@@ -48,7 +50,7 @@ export function CardContainer({ children, className, containerClassName }) {
 
 export function CardBody({ children, className }) {
   return (
-    <div className={cn('h-full w-full [transform-style:preserve-3d] [&>*]:[transform-style:preserve-3d]', className)}>
+    <div className={cn('h-full w-full transform-gpu [backface-visibility:hidden] [transform-style:preserve-3d] [&>*]:[transform-style:preserve-3d]', className)}>
       {children}
     </div>
   )
@@ -80,7 +82,7 @@ export function CardItem({
   }, [isMouseEntered, rotateX, rotateY, rotateZ, translateX, translateY, translateZ])
 
   return (
-    <Tag ref={ref} className={cn('w-fit transition duration-200 ease-linear', className)} {...rest}>
+    <Tag ref={ref} className={cn('w-fit transform-gpu transition-transform duration-300 ease-out [backface-visibility:hidden]', className)} {...rest}>
       {children}
     </Tag>
   )

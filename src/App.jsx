@@ -109,7 +109,7 @@ function EmailContactLink({ href, children, className = '' }) {
 function ExperienceEntry({ company, role, period, tags, mark, href }) {
   return (
     <CardContainer className="w-full" containerClassName="justify-start py-0">
-      <CardBody className="group/card relative min-h-[16.5rem] w-full rounded-[1.5rem] border border-white/10 bg-white/5 p-5 backdrop-blur-sm transition-shadow duration-500 ease-out dark:hover:shadow-2xl dark:hover:shadow-white/[0.08]">
+      <CardBody className="group/card relative min-h-[16.5rem] w-full overflow-hidden rounded-[1.5rem] border border-white/10 bg-[rgba(255,255,255,0.06)] p-5 transition-shadow duration-500 ease-out hover:shadow-[0_18px_48px_rgba(255,255,255,0.06)]">
         <CardItem
           as="a"
           href={href}
