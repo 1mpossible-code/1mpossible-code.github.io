@@ -699,7 +699,7 @@ function App() {
           </BackgroundGradientAnimation>
         </section>
         <section id="contact" className="mx-auto w-full max-w-7xl px-6 py-24 sm:px-8 lg:px-10 lg:py-28">
-          <div className="rounded-[2rem] bg-white/[0.015] px-6 py-12 sm:px-8 lg:px-10">
+          <div className="rounded-[2rem] bg-black px-6 py-12 sm:px-8 lg:px-10">
             <motion.div
               initial={{ opacity: 0, y: 32 }}
               whileInView={{ opacity: 1, y: 0 }}
