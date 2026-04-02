@@ -2,6 +2,7 @@ import { motion } from 'motion/react'
 import { CardBody, CardContainer, CardItem } from './components/ui/3d-card'
 import { FlipWords } from './components/ui/flip-words'
 import { FloatingNav } from './components/ui/floating-navbar'
+import { Meteors } from './components/ui/meteors'
 import { Terminal } from './components/ui/terminal'
 import { Timeline } from './components/ui/timeline'
 
@@ -246,7 +247,12 @@ function App() {
 
         <section id="about" className="h-px" />
         <section id="projects" className="mx-auto w-full max-w-7xl px-6 py-24 sm:px-8 lg:px-10 lg:py-28">
-          <div className="mb-12 max-w-3xl">
+          <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.02] px-6 py-10 sm:px-8 lg:px-10">
+            <div className="pointer-events-none absolute inset-0">
+              <Meteors number={18} />
+            </div>
+
+            <div className="mb-12 max-w-3xl">
             <p className="text-sm uppercase tracking-[0.35em] text-white/45">Projects</p>
             <h2 className="mt-4 text-3xl font-medium tracking-[-0.05em] text-white md:text-5xl">
               Systems-heavy projects shown in terminal form.
@@ -254,45 +260,46 @@ function App() {
             <p className="mt-4 max-w-2xl text-base leading-8 text-neutral-300">
               Three selected builds across distributed infrastructure, AI product engineering, and secure storage.
             </p>
-          </div>
+            </div>
 
-          <div className="grid gap-8 xl:grid-cols-3">
-            {projectCards.map((project, index) => (
-              <motion.div
-                key={project.title}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.45, delay: index * 0.08 }}
-                className="space-y-4"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <h3 className="text-xl font-medium text-white">{project.title}</h3>
-                    <p className="mt-2 max-w-sm text-sm leading-6 text-neutral-400">{project.blurb}</p>
+            <div className="relative z-10 grid gap-8 xl:grid-cols-3">
+              {projectCards.map((project, index) => (
+                <motion.div
+                  key={project.title}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.45, delay: index * 0.08 }}
+                  className="space-y-4"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <h3 className="text-xl font-medium text-white">{project.title}</h3>
+                      <p className="mt-2 max-w-sm text-sm leading-6 text-neutral-400">{project.blurb}</p>
+                    </div>
+                    <a
+                      href={project.repo}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`Open ${project.title} repository`}
+                      className="relative z-20 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white/80 transition hover:border-white/30 hover:bg-white/15 hover:text-white"
+                    >
+                      <ArrowUpRightIcon className="h-4 w-4" />
+                    </a>
                   </div>
-                  <a
-                    href={project.repo}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={`Open ${project.title} repository`}
-                    className="relative z-20 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white/80 transition hover:border-white/30 hover:bg-white/15 hover:text-white"
-                  >
-                    <ArrowUpRightIcon className="h-4 w-4" />
-                  </a>
-                </div>
 
-                <Terminal
-                  username="maksym"
-                  commands={[project.command]}
-                  outputs={{ 0: project.outputs }}
-                  typingSpeed={26}
-                  delayBetweenCommands={600}
-                  initialDelay={250}
-                  className="max-w-none px-0"
-                />
-              </motion.div>
-            ))}
+                  <Terminal
+                    username="maksym"
+                    commands={[project.command]}
+                    outputs={{ 0: project.outputs }}
+                    typingSpeed={26}
+                    delayBetweenCommands={600}
+                    initialDelay={250}
+                    className="max-w-none px-0"
+                  />
+                </motion.div>
+              ))}
+            </div>
           </div>
         </section>
         <section id="experience" className="mx-auto w-full max-w-7xl px-0 py-10 lg:py-16">
